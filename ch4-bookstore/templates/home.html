@@ -1,5 +1,12 @@
-{% extends "_base.html" %}
-{% block title %}Home{% endblock title %}
+{% extends "_base.html" %}  <!-- Inherits from the base template -->
+{% block title %}Home{% endblock title %}  <!-- Sets the title of the page -->
 {% block content %}
-<h1>This is our home page </h1>
+<h1>This is our home page.</h1>  <!-- Main heading of the page -->
+{% if user.is_authenticated %}  <!-- Checks if the user is logged in -->
+<p>Hi {{ user.email }}!</p>  <!-- Displays the user's email if authenticated -->
+<p><a href="{% url 'logout' %}">Log Out</a></p>
+{% else %}
+<p>You are not logged in</p>  <!-- Message for unauthenticated users -->
+<a href="{% url 'login' %}">Log In</a>  <!-- Link to the login page -->
+{% endif %}
 {% endblock content %}
