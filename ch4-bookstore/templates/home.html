@@ -8,5 +8,6 @@
 {% else %}
 <p>You are not logged in</p>  <!-- Message for unauthenticated users -->
 <a href="{% url 'login' %}">Log In</a>  <!-- Link to the login page -->
+<a href="{% url 'signup' %}">Sign Up</a>
 {% endif %}
 {% endblock content %}
