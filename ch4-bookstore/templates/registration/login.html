@@ -1,11 +1,12 @@
 <!-- templates/registration/login.html -->
 {% extends "_base.html" %}  <!-- Inherit from the base template -->
+{% load crispy_forms_tags %}
 {% block title %}Log In{% endblock title %}  <!-- Set the page title -->
 {% block content %}
 <h2>Log In</h2>  <!-- Main heading for the login page -->
 <form method="post">  <!-- Start of the form, using POST method for secure data submission -->
     {% csrf_token %}  <!-- CSRF token for security -->
-    {{ form.as_p }}  <!-- Render the form fields as paragraphs -->
+    {{ form|crispy }}  <!-- Render the form fields as paragraphs -->
     <button type="submit">Log In</button>  <!-- Submit button for the form -->
 </form>
 {% endblock content %}
