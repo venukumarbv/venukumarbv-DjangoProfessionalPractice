@@ -20,8 +20,8 @@ urlpatterns = [
     # Django Admin
     path('admin/', admin.site.urls),
     # User management
-    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/", include("allauth.urls")), # Earlier auth app's url 'django.contrib.auth.urls' now use django-allauth's urls
     # Local Apps
-    path("accounts/", include('accounts.urls')),
+    # path("accounts/", include('accounts.urls')), # This is no longer required we can 'delete' the accounts/urls.py and accounts/views.py for signup
     path('', include('pages.urls')),
 ]

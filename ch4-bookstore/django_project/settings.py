@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 
 from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, STATICFILES_DIRS, STATIC_ROOT, \
-    STATICFILES_STORAGE
+    STATICFILES_STORAGE, AUTHENTICATION_BACKENDS, EMAIL_BACKEND
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites",
     # Third-party
     "crispy_forms",
     "crispy_bootstrap5",
+    "allauth",
+    "allauth.account",
     #Local
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig'
@@ -138,9 +141,28 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
-LOGIN_REDIRECT_URL = 'home'
+
 LOGOUT_REDIRECT_URL = "home"
 
 # django-crispy-forms
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5" # new
-CRISPY_TEMPLATE_PACK = "bootstrap5" # new
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+#django-allauth config
+LOGIN_REDIRECT_URL = 'home' # Moved from top to here
+ACCOUNT_LOGOUT_REDIRECT = 'home' # All auth's logout redirect overrides LOGOUT_REDIRECT_URL
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend", # Default backend of the Django
+    "allauth.account.auth_backends.AuthenticationBackend", # Add this option 'too'
+)
+# Instead of sending out real emails the console backend just writes the emails that would be sent to the standard output
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
