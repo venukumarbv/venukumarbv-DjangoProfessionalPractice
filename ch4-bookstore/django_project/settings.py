@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from environs import Env  # Import
+
+env = Env()  # Initialize
+env.read_env()  # read .env file, if it exists
 
 from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, STATICFILES_DIRS, STATIC_ROOT, \
     STATICFILES_STORAGE, AUTHENTICATION_BACKENDS, EMAIL_BACKEND
@@ -18,18 +22,16 @@ from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL,
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_tk%x9t51r4twlyb8d9h2+qyzwevoe#1xya(maz7_(jy*c9n6!'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
 
 # Application definition
 
@@ -46,7 +48,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "allauth",
     "allauth.account",
-    #Local
+    # Local
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig'
 ]
@@ -81,19 +83,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "db",
-        "PORT": 5432,
-    }
+    "default": env.dj_db_url("DATABASE_URL", default="postgres://postgres@db/postgres")
 }
 
 
@@ -115,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -127,13 +120,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR/ "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # Default primary key field type
@@ -148,13 +140,13 @@ LOGOUT_REDIRECT_URL = "home"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-#django-allauth config
-LOGIN_REDIRECT_URL = 'home' # Moved from top to here
-ACCOUNT_LOGOUT_REDIRECT = 'home' # All auth's logout redirect overrides LOGOUT_REDIRECT_URL
+# django-allauth config
+LOGIN_REDIRECT_URL = 'home'  # Moved from top to here
+ACCOUNT_LOGOUT_REDIRECT = 'home'  # All auth's logout redirect overrides LOGOUT_REDIRECT_URL
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend", # Default backend of the Django
-    "allauth.account.auth_backends.AuthenticationBackend", # Add this option 'too'
+    "django.contrib.auth.backends.ModelBackend",  # Default backend of the Django
+    "allauth.account.auth_backends.AuthenticationBackend",  # Add this option 'too'
 )
 # Instead of sending out real emails the console backend just writes the emails that would be sent to the standard output
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
