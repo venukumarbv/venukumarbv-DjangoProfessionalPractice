@@ -17,7 +17,7 @@ env = Env()  # Initialize
 env.read_env()  # read .env file, if it exists
 
 from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, STATICFILES_DIRS, STATIC_ROOT, \
-    STATICFILES_STORAGE, AUTHENTICATION_BACKENDS, EMAIL_BACKEND
+    STATICFILES_STORAGE, AUTHENTICATION_BACKENDS, EMAIL_BACKEND, DEFAULT_FROM_EMAIL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,7 +149,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",  # Add this option 'too'
 )
 # Instead of sending out real emails the console backend just writes the emails that would be sent to the standard output
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
@@ -158,3 +158,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+DEFAULT_FROM_EMAIL = "admin@djangobookstore.com"
